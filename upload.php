@@ -1,6 +1,7 @@
 <?php
+require_once(__DIR__.'/function.php');
 if(isset($_FILES["files"])){
-    $dir = md5(uniqid(rand(), true));
+    $dir = random(25);
     mkdir(__DIR__.'/upload/'.$dir, 0700);
     if(!file_exists(__DIR__.'/upload/'.$dir)){
         exit;
