@@ -14,7 +14,7 @@ if(isset($_GET['key']) && file_exists('./upload/'.$_GET['key'])){
         };
         echo $result.'<br>';
     }
-    if($result){
+    if(isset($result)){
         rmdir($dir);
     }else{
         $error_message = 'ファイルの削除に失敗したためディレクトリを削除することはできません。';
