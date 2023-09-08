@@ -1,4 +1,8 @@
 <?php
+$host = null;
+$database_name = null;
+$user = null;
+$password = null;
 if(isset($_GET['key']) && file_exists('./upload/'.$_GET['key'])){
     require_once(__DIR__.'/function.php');
     require_once(__DIR__.'/config.php');
@@ -23,9 +27,7 @@ if(isset($_GET['key']) && file_exists('./upload/'.$_GET['key'])){
         echo $result.'<br>';
     }
     $delete = delete_sql($host, $database_name, $user, $password, $_GET['key'], $dir_password);
-    if(isset($result, $delete)){
-        rmdir($dir);
-    }else{
+    if(!rmdir($dir)){
         $error_message = "ファイルの削除に失敗したためディレクトリを削除することはできません。\n".$delete;
     }
 }else{
