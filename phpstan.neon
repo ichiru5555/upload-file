@@ -1,6 +1,5 @@
 parameters:
     paths:
         - .
-    level: 1
     excludePaths:
         - vendor/
