@@ -1,4 +1,5 @@
 <?php
+$file_name = null;
 if(isset($_GET['key'], $_GET['file_name'])){
     if(preg_match("/[一-龠]+|[ぁ-ん]+|[ァ-ヴー]+|[一-龠]+|[ａ-ｚＡ-Ｚ０-９]/u", $_GET['file_name'])){
         $file_name = __DIR__.'/upload/'.$_GET['key'].'/'.$_GET['file_name'];
