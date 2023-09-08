@@ -1,8 +1,8 @@
 <?php
-$host = null;
-$database_name = null;
-$user = null;
-$password = null;
+$host = '';
+$database_name = '';
+$user = '';
+$password = '';
 if(isset($_FILES["files"])){
     require_once(__DIR__.'/function.php');
     require_once(__DIR__.'/config.php');
