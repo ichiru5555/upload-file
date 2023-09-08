@@ -20,7 +20,7 @@ if(isset($_FILES["files"])){
             move_uploaded_file($_FILES["files"]["tmp_name"][$i],__DIR__."/upload/".$dir.'/'.basename($_FILES["files"]["name"][$i]));
         }
     }
-    $pdo = new PDO('mysql:dbname='.$database_name.';host='.$host.';',$user,$passwd);
+    $pdo = new PDO('mysql:dbname='.$database_name.';host='.$host.';',$user,$password);
     $sql = "INSERT INTO upload (id, dir_name, dir_passwd) VALUES (NULL, :dir_name, :dir_passwd);";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':dir_name', $dir);
