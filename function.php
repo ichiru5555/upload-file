@@ -4,30 +4,31 @@ function random(int $length){
         $randomhex = bin2hex($randombytes);
         return $randomhex;
 }
-function password_sql(string $host, string $database_name, string $user, string $password, string $dir_name, string $dir_password){
+function password_sql(string $host, string $database_name, string $user, string $password, string $dir_name, ?string $dir_password){
     $pdo = new PDO('mysql:dbname='.$database_name.';host='.$host.';',$user,$password);
-    $sql = "SELECT * FROM upload WHERE dir_name = :user_id;";
+    $sql = "SELECT * FROM upload WHERE dir_name = :dir_name;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':dir_name', $dir_name);
     $stmt->execute();
     $result = $stmt->fetch();
-    if(password_verify($dir_password, $result['dir_passwd'])){
-        unset($pdo);
-        unset($result);
+    if(is_null($result['dir_name'])){
         return true;
-    }else{
-        unset($pdo);
-        unset($result);
-        return false;
     }
+    $dir_passwd = $result['dir_passwd'];
+    unset($pdo);
+    unset($result);
+    return password_verify($dir_password, $dir_passwd);
 }
-function delete_sql(string $host, string $database_name, string $user, string $password, string $dir_name, string $dir_password){
+function delete_sql(string $host, string $database_name, string $user, string $password, string $dir_name, ?string $dir_password){
     $pdo = new PDO('mysql:dbname='.$database_name.';host='.$host.';',$user,$password);
-    $sql = "SELECT * FROM upload WHERE dir_name = :user_id;";
+    $sql = "SELECT * FROM upload WHERE dir_name = :dir_name;";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':dir_name', $dir_name);
     $stmt->execute();
     $result = $stmt->fetch();
+    if(is_null($result['dir_name'])){
+        return true;
+    }
     if(password_verify($dir_password, $result['dir_passwd'])){
         $sql = "DELETE FROM upload WHERE dir_name = :dir_name;";
         $stmt = $pdo->prepare($sql);

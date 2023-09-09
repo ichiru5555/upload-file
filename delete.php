@@ -3,19 +3,19 @@ $host = '';
 $database_name = '';
 $user = '';
 $password = '';
-if(isset($_GET['key']) && file_exists('./upload/'.$_GET['key'])){
+if(isset($_POST['key']) && file_exists('./upload/'.$_POST['key'])){
     require_once(__DIR__.'/function.php');
     require_once(__DIR__.'/config.php');
     $dir_password = $_POST['dir_passwd'] ?? null;
-    $dir = __DIR__.'/upload/'.$_GET['key'];
-    if(!password_sql($host, $database_name, $user, $password, $_GET['key'], $dir_password)){
+    $dir = __DIR__.'/upload/'.$_POST['key'];
+    if(!password_sql($host, $database_name, $user, $password, $_POST['key'], $dir_password)){
         echo nl2br("パスワードが一致しません。\n再度お試しください");
         exit;
     }
     $files = glob($dir . '/*.*');
     if(!$files){
         rmdir($dir);
-        delete_sql($host, $database_name, $user, $password, $_GET['key'], $dir_password);
+        delete_sql($host, $database_name, $user, $password, $_POST['key'], $dir_password);
         echo 'ディレクトリ内のファイルは見つかりませんでしたが、ディレクトリの削除に成功しました。';
         exit;
     }
@@ -26,12 +26,10 @@ if(isset($_GET['key']) && file_exists('./upload/'.$_GET['key'])){
         };
         echo $result.'<br>';
     }
-    $delete = delete_sql($host, $database_name, $user, $password, $_GET['key'], $dir_password);
+    $delete = delete_sql($host, $database_name, $user, $password, $_POST['key'], $dir_password);
     if(!rmdir($dir)){
         $error_message = "ファイルの削除に失敗したためディレクトリを削除することはできません。\n".$delete;
     }
-}else{
-    $error_message = 'エラーが発生しました。';
 }
 ?>
 <!DOCTYPE html>
@@ -49,8 +47,10 @@ if(isset($_GET['key']) && file_exists('./upload/'.$_GET['key'])){
         echo nl2br($error_message);
     }
     ?>
-    <form action="" method="get">
-        <input type="text" name="key">
+    <form action="" method="post">
+        <div>
+            共有キー: <input type="text" name="key">
+        </div>
         <div>
             パスワード: <input type="password" name="dir_passwd">
         </div>
