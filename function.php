@@ -11,7 +11,7 @@ function password_sql(string $host, string $database_name, string $user, string 
     $stmt->bindValue(':dir_name', $dir_name);
     $stmt->execute();
     $result = $stmt->fetch();
-    if(password_verify($dir_password, $result['passwd'])){
+    if(password_verify($dir_password, $result['dir_passwd'])){
         unset($pdo);
         unset($result);
         return true;
@@ -28,7 +28,7 @@ function delete_sql(string $host, string $database_name, string $user, string $p
     $stmt->bindValue(':dir_name', $dir_name);
     $stmt->execute();
     $result = $stmt->fetch();
-    if(password_verify($dir_password, $result['passwd'])){
+    if(password_verify($dir_password, $result['dir_passwd'])){
         $sql = "DELETE FROM upload WHERE dir_name = :dir_name;";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':dir_name', $dir_name);
