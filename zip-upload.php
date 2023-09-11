@@ -6,7 +6,7 @@ $password = '';
 if(isset($_FILES['zipfile'])){
     require_once(__DIR__.'/function.php');
     require_once(__DIR__.'/config.php');
-    $dir_password = str_replace([' ', '　'], null, $_POST['dir_passwd']);
+    $dir_password = str_replace([' ', '　'], '', $_POST['dir_passwd']);
     if(empty($dir_password)){
         $dir_password = null;
     }
