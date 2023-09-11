@@ -1,5 +1,6 @@
 <?php
 $file_name = null;
+$get_key = '';
 if(isset($_GET['key'])){
     if(!preg_match('/^[a-zA-Z0-9_-]+$/', $_GET['key'])){
         echo '入ってはいけない文字が入っています.';
@@ -15,7 +16,7 @@ if(isset($_GET['key'], $_GET['file_name'])){
         $file_name = __DIR__.'/upload/'.$get_key.'/'.$_GET['file_name'];
     }
 }
-if(isset($_GET['key']) and empty($_GET['file_name']) && file_exists(__DIR__.'/upload/'.$_GET['key']) && empty($_GET['zip'])){
+if(isset($_GET['key']) && empty($_GET['file_name']) && file_exists(__DIR__.'/upload/'.$get_key) && empty($_GET['zip'])){
     $dir = __DIR__.'/upload/'.$get_key;
     $dir_array = glob($dir.'/*');
 }elseif(isset($_GET['key'], $_GET['file_name']) and is_file($file_name) && empty($_GET['zip'])){

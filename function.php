@@ -36,10 +36,15 @@ function delete_sql(string $host, string $database_name, string $user, string $p
     $stmt->bindValue(':dir_name', $dir_name);
     $stmt->execute();
     $result = $stmt->fetch();
-    if(is_null($result['dir_name'])){
+    if(is_null($dir_password)){
+        $sql = "DELETE FROM upload WHERE dir_name = :dir_name;";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':dir_name', $dir_name);
+        $stmt->execute();
+        unset($pdo);
+        unset($result);
         return true;
-    }
-    if(password_verify($dir_password, $result['dir_passwd'])){
+    }elseif(password_verify($dir_password, $result['dir_passwd'])){
         $sql = "DELETE FROM upload WHERE dir_name = :dir_name;";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':dir_name', $dir_name);
@@ -50,6 +55,6 @@ function delete_sql(string $host, string $database_name, string $user, string $p
     }else{
         unset($pdo);
         unset($result);
-        return 'パスワードの認証に失敗したためデーターベースの削除に失敗しました';
+        return false;
     }
 }

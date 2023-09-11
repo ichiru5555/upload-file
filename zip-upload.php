@@ -6,8 +6,11 @@ $password = '';
 if(isset($_FILES['zipfile'])){
     require_once(__DIR__.'/function.php');
     require_once(__DIR__.'/config.php');
-    $dir_password = $_POST['dir_passwd'] ?? null;
-    if(!empty($dir_password)){
+    $dir_password = str_replace([' ', '　'], null, $_POST['dir_passwd']);
+    if(empty($dir_password)){
+        $dir_password = null;
+    }
+    if(!is_null($dir_password)){
         $dir_password = password_hash($dir_password, PASSWORD_DEFAULT);
     }
     $pathinfo = pathinfo($_FILES["zipfile"]["name"], PATHINFO_EXTENSION);
@@ -30,8 +33,6 @@ if(isset($_FILES['zipfile'])){
     foreach($files as $file){
         if(is_file($file)){
             chmod ($file, 0700);
-        }else{
-            echo 'ファイルのパーミッションを変更することができませんでした。';
         }
     }
     register_sql($host, $database_name, $user, $password, $dir, $dir_password);
