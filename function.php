@@ -4,6 +4,16 @@ function random(int $length){
         $randomhex = bin2hex($randombytes);
         return $randomhex;
 }
+function register_sql(string $host, string $database_name, string $user, string $password, string $dir_name, ?string $dir_password){
+    $pdo = new PDO('mysql:dbname='.$database_name.';host='.$host.';',$user,$password);
+    $sql = "INSERT INTO upload (id, dir_name, dir_passwd) VALUES (NULL, :dir_name, :dir_passwd);";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':dir_name', $dir_name);
+    $stmt->bindValue(':dir_passwd', $dir_password);
+    $stmt->execute();
+    unset($pdo);
+    unset($stmt);
+}
 function password_sql(string $host, string $database_name, string $user, string $password, string $dir_name, ?string $dir_password){
     $pdo = new PDO('mysql:dbname='.$database_name.';host='.$host.';',$user,$password);
     $sql = "SELECT * FROM upload WHERE dir_name = :dir_name;";

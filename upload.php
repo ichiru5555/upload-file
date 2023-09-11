@@ -7,7 +7,7 @@ if(isset($_FILES["files"])){
     require_once(__DIR__.'/function.php');
     require_once(__DIR__.'/config.php');
     $dir_password = $_POST['dir_passwd'] ?? null;
-    if(!is_null($dir_password)){
+    if(!empty($dir_password)){
         $dir_password = password_hash($dir_password, PASSWORD_DEFAULT);
     }
     $dir = random(25);
