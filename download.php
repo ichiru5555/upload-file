@@ -15,10 +15,10 @@ if(isset($get_key, $_GET['file_name'])){
         $file_name = __DIR__.'/upload/'.$get_key.'/'.$_GET['file_name'];
     }
 }
-if(isset($_GET['key']) && empty($_GET['file_name']) && file_exists(__DIR__.'/upload/'.$get_key) && empty($_GET['zip'])){
+if(isset($get_key) && empty($_GET['file_name']) && file_exists(__DIR__.'/upload/'.$get_key) && empty($_GET['zip'])){
     $dir = __DIR__.'/upload/'.$get_key;
     $dir_array = glob($dir.'/*');
-}elseif(isset($_GET['key'], $_GET['file_name']) and is_file($file_name) && empty($_GET['zip'])){
+}elseif(isset($get_key, $_GET['file_name']) and is_file($file_name) && empty($_GET['zip'])){
     $file = __DIR__.'/upload/'.$get_key.'/'.$_GET['file_name'];
     $filetype = pathinfo($file, PATHINFO_EXTENSION);
     header("Content-type: application/$filetype");
@@ -26,7 +26,7 @@ if(isset($_GET['key']) && empty($_GET['file_name']) && file_exists(__DIR__.'/upl
     header('Content-Length: '.filesize($file));
     readfile($file);
     exit;
-}elseif(isset($_GET['key'], $_GET['zip'])){
+}elseif(isset($get_key, $_GET['zip'])){
     $zip_file = __DIR__.'/upload/'.$get_key.'/all.zip';
     if(is_file(__DIR__.'/upload/'.$get_key.'/all.zip')){
         header("Content-type: application/zip");
@@ -64,7 +64,7 @@ if(isset($_GET['key']) && empty($_GET['file_name']) && file_exists(__DIR__.'/upl
 </head>
 <body>
     <?php
-    if(empty($_GET['key'])){
+    if(empty($get_key)){
     ?>
     <p>共有されたコードを記入して送信してください</p>
     <form action="" method="get">
@@ -72,14 +72,17 @@ if(isset($_GET['key']) && empty($_GET['file_name']) && file_exists(__DIR__.'/upl
         <input type="submit">
     </form>
     <?php
-    }elseif(isset($_GET['key'], $dir_array)){
+    }elseif(isset($get_key, $dir_array)){
     ?>
     <p>ファイル一覧</p>
     <?php
     foreach($dir_array as $file){
-        echo '<p>ファイル名: <a href="./download.php?key='.$_GET['key'].'&file_name='.basename($file).'">'.basename($file).'</a></p>';
+        if(basename($file) === 'all.zip'){
+            continue;
+        }
+        echo '<p>ファイル名: <a href="./download.php?key='.$get_key.'&file_name='.basename($file).'">'.basename($file).'</a></p>';
     }
-    echo '<p>ファイル名: <a href="./download.php?key='.$_GET['key'].'&zip=true">all.zip</a></p>';
+    echo '<p>ファイル名: <a href="./download.php?key='.$get_key.'&zip=true">all.zip</a></p>';
     }elseif(isset($error)){
         echo $error;
     }
