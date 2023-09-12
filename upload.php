@@ -15,11 +15,13 @@ if(isset($_FILES["files"])){
     if(!file_exists(__DIR__.'/upload/'.$dir)){
         exit;
     }
-    for($i = 0; $i < count($_FILES["files"]["name"]); $i++ ){
+    $filecount = count($_FILES["files"]["name"]);
+    for($i = 0; $i < $filecount; ++$i){
         if(is_uploaded_file($_FILES["files"]["tmp_name"][$i])){
             move_uploaded_file($_FILES["files"]["tmp_name"][$i],__DIR__."/upload/".$dir.'/'.basename($_FILES["files"]["name"][$i]));
         }
     }
+    unset($filecount);
     register_sql($host, $database_name, $user, $password, $dir, $dir_password);
     $comment = "アップロード完了しました。\n以下のコードを共有することによって誰でもダウンロードすることができます。\n$dir";
 }
