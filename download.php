@@ -1,6 +1,5 @@
 <?php
 $file_name = null;
-$get_key = '';
 if(isset($_GET['key'])){
     if(!preg_match('/^[a-zA-Z0-9_-]+$/', $_GET['key'])){
         echo '入ってはいけない文字が入っています.';
@@ -8,9 +7,9 @@ if(isset($_GET['key'])){
     }
     $get_key = htmlspecialchars($_GET['key'], ENT_QUOTES);
 }
-if(isset($_GET['key'], $_GET['file_name'])){
+if(isset($get_key, $_GET['file_name'])){
     if(preg_match("/[一-龠]+|[ぁ-ん]+|[ァ-ヴー]+|[一-龠]+|[ａ-ｚＡ-Ｚ０-９]/u", $_GET['file_name'])){
-        $file_name = __DIR__.'/upload/'.htmlentities($get_key).'/'.$_GET['file_name'];
+        $file_name = __DIR__.'/upload/'.$get_key.'/'.$_GET['file_name'];
         $file_name = mb_convert_encoding($file_name, 'sjis', 'auto');
     }else{
         $file_name = __DIR__.'/upload/'.$get_key.'/'.$_GET['file_name'];
@@ -28,13 +27,14 @@ if(isset($_GET['key']) && empty($_GET['file_name']) && file_exists(__DIR__.'/upl
     readfile($file);
     exit;
 }elseif(isset($_GET['key'], $_GET['zip'])){
-    if(!$_GET['zip']){
-        exit;
-    }
-    if(is_file(__DIR__.'/upload/'.$get_key.'/all.zip')){
-        exit;
-    }
     $zip_file = __DIR__.'/upload/'.$get_key.'/all.zip';
+    if(is_file(__DIR__.'/upload/'.$get_key.'/all.zip')){
+        header("Content-type: application/zip");
+        header('Content-Disposition: attachment; filename="all.zip"');
+        header('Content-Length: '.filesize($zip_file));
+        readfile($zip_file);
+        exit;
+    }
     $zip = new ZipArchive();
     $result = $zip->open($zip_file, ZipArchive::CREATE);
     if(!$result){
